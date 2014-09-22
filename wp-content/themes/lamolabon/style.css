@@ -1,0 +1,70 @@
+/*
+Theme Name: Lamolabon
+Theme URL: http://lamolabo.com
+Description: This is training theme.
+Author: Omoon
+Version: 1.0
+*/
+
+body {
+    background-color: #efe3f4;
+    color: #565656;
+    line-height: 190%;
+}
+
+.logo {
+    margin-top: 50px;
+    margin-bottom: 50px
+}
+
+.description {
+    width: 200px;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.menu {
+    font-size: 90%;
+}
+
+.contents_wrapper {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    background-color: #ffffff;
+}
+
+.contents_container {
+    background-color: #ffffff;
+    border-right: 15px solid #f7f7f7;
+    border-left: 15px solid #f7f7f7;
+    padding-left: 8%;
+    padding-right: 8%;
+}
+
+h2.page_title {
+    padding-top: 30px;
+    padding-bottom: 40px;
+    text-align: center;
+}
+
+h2.page_title a {
+    font-size: 20px;
+    color: #565656;
+}
+
+div.the_contents img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+
+p {
+    margin-bottom: 1.8em;
+}
+
