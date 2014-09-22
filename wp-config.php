@@ -21,22 +21,39 @@
 
 // ** MySQL 設定 - この情報はホスティング先から入手してください。 ** //
 /** WordPress のためのデータベース名 */
-define('DB_NAME', 'lamolabon');
-
-/** MySQL データベースのユーザー名 */
-define('DB_USER', 'root');
-
-/** MySQL データベースのパスワード */
-define('DB_PASSWORD', '');
-
-/** MySQL のホスト名 */
-define('DB_HOST', '192.168.33.51');
+//define('DB_NAME', 'lamolabon');
+//
+///** MySQL データベースのユーザー名 */
+//define('DB_USER', 'root');
+//
+///** MySQL データベースのパスワード */
+//define('DB_PASSWORD', '');
+//
+///** MySQL のホスト名 */
+//define('DB_HOST', '192.168.33.51');
 
 /** データベースのテーブルを作成する際のデータベースの文字セット */
 define('DB_CHARSET', 'utf8');
 
 /** データベースの照合順序 (ほとんどの場合変更する必要はありません) */
 define('DB_COLLATE', '');
+
+if (isset($_SERVER['PLATFORM']) && $_SERVER['PLATFORM'] == 'PAGODABOX') {
+    define('DB_NAME', $_SERVER['DB1_NAME']);
+    define('DB_USER', $_SERVER['DB1_USER']);
+    define('DB_PASSWORD', $_SERVER['DB1_PASS']);
+    define('DB_HOST', $_SERVER['DB1_HOST'] . ':' . $_SERVER['DB1_PORT']);
+} elseif (isset($_SERVER['PLATFORM']) && $_SERVER['PLATFORM'] == 'SAKURA') {
+    define('DB_NAME', 'lamolabon');
+    define('DB_USER', 'root');
+    define('DB_PASSWORD', 'root');
+    define('DB_HOST', 'localhost');
+} else {
+    define('DB_NAME', 'lamolabon');
+    define('DB_USER', 'root');
+    define('DB_PASSWORD', '');
+    define('DB_HOST', '192.168.33.11');
+}
 
 /**#@+
  * 認証用ユニークキー
@@ -47,14 +64,14 @@ define('DB_COLLATE', '');
  *
  * @since 2.6.0
  */
-define('AUTH_KEY',         'c|KZF/7tGR|EFFz!L*ro#r)RP>h]2yk?)qdOb4o#*yO(U>i+K5iIB;4}t,:|[?2T');
-define('SECURE_AUTH_KEY',  'k}1c[M]Q2|fm_|Z@a,<:%@<8Omz4vX[SLp-yVQ^q@L_mL+md_<EmXA(--$YM*1i{');
-define('LOGGED_IN_KEY',    '+TSP]?a[J&XEKNoYk7[+COr&]r,$QJ+Q?R+`s`[mGpq!sCb}LT5Y!V7L0G#_gTG7');
-define('NONCE_KEY',        'Qigbu^H,LzWNIqvd-qX!B+:&y8=P2C|5`:3heAw+9o~gu_lT}e3xT0Gb#=Pou50t');
-define('AUTH_SALT',        'FpY{BoP^j&_0]n#y/R 2:d!3[JcBEm.P5R+]nR8YRn=o8@$7~1k6kp-$S%XTHY#?');
+define('AUTH_KEY', 'c|KZF/7tGR|EFFz!L*ro#r)RP>h]2yk?)qdOb4o#*yO(U>i+K5iIB;4}t,:|[?2T');
+define('SECURE_AUTH_KEY', 'k}1c[M]Q2|fm_|Z@a,<:%@<8Omz4vX[SLp-yVQ^q@L_mL+md_<EmXA(--$YM*1i{');
+define('LOGGED_IN_KEY', '+TSP]?a[J&XEKNoYk7[+COr&]r,$QJ+Q?R+`s`[mGpq!sCb}LT5Y!V7L0G#_gTG7');
+define('NONCE_KEY', 'Qigbu^H,LzWNIqvd-qX!B+:&y8=P2C|5`:3heAw+9o~gu_lT}e3xT0Gb#=Pou50t');
+define('AUTH_SALT', 'FpY{BoP^j&_0]n#y/R 2:d!3[JcBEm.P5R+]nR8YRn=o8@$7~1k6kp-$S%XTHY#?');
 define('SECURE_AUTH_SALT', 'uy+4Rbxi Vg/4n--.|(vPC|%rx@h?fyB#/89e-+0S`-r>twg82F2!%q($J8ce-9g');
-define('LOGGED_IN_SALT',   '8<hY.-`RvF%r|,T)&8HmnYp/w?!8ff_W7|-j-I!Da<8hFk0KCrU=Qg}Z+(l9@#r-');
-define('NONCE_SALT',       'Btrs_7%4+L+xJ1MyMZ%OXiCRhwO9u+O`+#;;}|:~rS^rgF:f[OMFyz+j[A~E$M{?');
+define('LOGGED_IN_SALT', '8<hY.-`RvF%r|,T)&8HmnYp/w?!8ff_W7|-j-I!Da<8hFk0KCrU=Qg}Z+(l9@#r-');
+define('NONCE_SALT', 'Btrs_7%4+L+xJ1MyMZ%OXiCRhwO9u+O`+#;;}|:~rS^rgF:f[OMFyz+j[A~E$M{?');
 
 /**#@-*/
 
@@ -64,7 +81,7 @@ define('NONCE_SALT',       'Btrs_7%4+L+xJ1MyMZ%OXiCRhwO9u+O`+#;;}|:~rS^rgF:f[OMF
  * それぞれにユニーク (一意) な接頭辞を与えることで一つのデータベースに複数の WordPress を
  * インストールすることができます。半角英数字と下線のみを使用してください。
  */
-$table_prefix  = 'wp_';
+$table_prefix = 'wp_';
 
 /**
  * 開発者へ: WordPress デバッグモード
@@ -77,8 +94,9 @@ define('WP_DEBUG', false);
 /* 編集が必要なのはここまでです ! WordPress でブログをお楽しみください。 */
 
 /** Absolute path to the WordPress directory. */
-if ( !defined('ABSPATH') )
-	define('ABSPATH', dirname(__FILE__) . '/');
+if (!defined('ABSPATH')) {
+    define('ABSPATH', dirname(__FILE__) . '/');
+}
 
 /** Sets up WordPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');
