@@ -47,12 +47,20 @@
                         <?php wp_nav_menu(['container' => false, 'menu_class' => 'nav nav-pills']); ?>
                     </div>
 
+                    <div class="center-block text-center menu">
+                        <?php wp_tag_cloud(['taxonomy' => 'category']); ?>
+                    </div>
+
                     <?php if (have_posts()): while (have_posts()): the_post(); ?>
                         <div class="center-block">
                             <h2 class="page_title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
                         </div>
                         <div class="the_contents">
                             <?php the_content(); ?>
+                        </div>
+
+                        <div class="post_date text-right">
+                            <?php the_date(); ?>
                         </div>
 
                         <?php if (has_category()): ?>
@@ -85,12 +93,14 @@
                             )
                         );
 
-                        $r = "<ul class='pagination'>\n\t<li>";
-                        $r .= join("</li>\n\t<li>", $page_links);
-                        $r .= "</li>\n</ul>\n";
+                        if (count($page_links)) {
+                            $r = "<ul class='pagination'>\n\t<li>";
+                            $r .= join("</li>\n\t<li>", $page_links);
+                            $r .= "</li>\n</ul>\n";
 
-                        // うまく行ってない。ここは bootstrap との兼ね合い
-                        echo str_replace("current", "active", $r);
+                            // うまく行ってない。ここは bootstrap との兼ね合い
+                            echo str_replace("current", "active", $r);
+                        }
                         ?>
                     </div>
 
