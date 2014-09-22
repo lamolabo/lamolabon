@@ -60,6 +60,41 @@
                         <?php endif; ?>
                     <?php endwhile; endif; ?>
 
+
+                    <div class="text-center">
+                        <?php global $wp_rewrite;
+                        $paginate_base = get_pagenum_link(1);
+                        if (strpos($paginate_base, '?') || !$wp_rewrite->using_permalinks()) {
+                            $paginate_format = '';
+                            $paginate_base = add_query_arg('paged', '%#%');
+                        } else {
+                            $paginate_format = (substr($paginate_base, -1, 1) == '/' ? '' : '/') .
+                                user_trailingslashit('page/%#%/', 'paged');;
+                            $paginate_base .= '%_%';
+                        }
+                        $page_links = paginate_links(
+                            array(
+                                'base' => $paginate_base,
+                                'format' => $paginate_format,
+                                'total' => $wp_query->max_num_pages,
+                                'mid_size' => 4,
+                                'current' => ($paged ? $paged : 1),
+                                'prev_text' => '«',
+                                'next_text' => '»',
+                                'type' => 'array',
+                            )
+                        );
+
+                        $r = "<ul class='pagination'>\n\t<li>";
+                        $r .= join("</li>\n\t<li>", $page_links);
+                        $r .= "</li>\n</ul>\n";
+
+                        // うまく行ってない。ここは bootstrap との兼ね合い
+                        echo str_replace("current", "active", $r);
+                        ?>
+                    </div>
+
+
                     <div class="footer text-right">
                         <p>&copy; la mola bon</p>
                     </div>
