@@ -27,12 +27,17 @@ body {
     margin-bottom: 20px;
 }
 
+.menu {
+    margin-top: 50px;
+}
+
 .menu a {
     color: #565656;
 }
 
 .category {
     font-size: 90%;
+    margin-top: 40px;
 }
 
 .category a {
