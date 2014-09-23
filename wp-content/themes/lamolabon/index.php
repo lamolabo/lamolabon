@@ -48,7 +48,7 @@
                     </div>
 
                     <div class="center-block text-center menu">
-                        <?php wp_tag_cloud(['taxonomy' => 'category']); ?>
+                        <?php wp_tag_cloud(['smallest' => 10, 'largest' => 10, 'taxonomy' => 'category']); ?>
                     </div>
 
                     <?php if (have_posts()): while (have_posts()): the_post(); ?>
@@ -59,7 +59,7 @@
                             <?php the_content(); ?>
                         </div>
 
-                        <div class="post_date text-right">
+                        <div class="post_date text-right text-muted">
                             <?php the_date(); ?>
                         </div>
 
