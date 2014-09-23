@@ -27,8 +27,16 @@ body {
     margin-bottom: 20px;
 }
 
-.menu {
+.menu a {
+    color: #565656;
+}
+
+.category {
     font-size: 90%;
+}
+
+.category a {
+    color: #898989;
 }
 
 .contents_wrapper {

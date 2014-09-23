@@ -44,10 +44,10 @@
                     </div>
 
                     <div class="center-block text-center menu">
-                        <?php wp_nav_menu(['container' => false, 'menu_class' => 'nav nav-pills']); ?>
+                        <?php wp_nav_menu(['container' => false, 'menu_class' => 'list-inline']); ?>
                     </div>
 
-                    <div class="center-block text-center menu">
+                    <div class="center-block text-center category">
                         <?php wp_tag_cloud(['smallest' => 10, 'largest' => 10, 'taxonomy' => 'category']); ?>
                     </div>
 
