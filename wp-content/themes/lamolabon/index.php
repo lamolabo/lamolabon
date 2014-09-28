@@ -7,10 +7,11 @@
     <title><?php bloginfo('name'); ?></title>
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-
+    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/bootstrap.css">
     <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
+    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/bootstrap-theme.css">
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -26,10 +27,20 @@
 </head>
 <body>
 
+<div id="fb-root"></div>
+<script>(function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&appId=843194075690965&version=v2.0";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
 <div class="container">
 
     <div class="row">
-        <div class="col-sm-8 col-sm-offset-2 contents_wrapper">
+        <div class="col-md-6 col-md-offset-2 contents_wrapper">
             <div class="contents_container">
                 <div class="row">
 
@@ -60,14 +71,31 @@
                         </div>
 
                         <div class="post_date text-right text-muted">
-                            <?php the_date(); ?>
+                            <?php the_time("Y/m/d"); ?>
                         </div>
 
                         <?php if (has_category()): ?>
                             <p>カテゴリ: <?php the_category(' | '); ?></p>
                         <?php endif; ?>
-                    <?php endwhile; endif; ?>
 
+                        <div class="text-left">
+                            <a href="https://twitter.com/share" class="twitter-share-button"
+                               data-url="<?php the_permalink(); ?>">Tweet</a>
+                            <script>!function (d, s, id) {
+                                    var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+                                    if (!d.getElementById(id)) {
+                                        js = d.createElement(s);
+                                        js.id = id;
+                                        js.src = p + '://platform.twitter.com/widgets.js';
+                                        fjs.parentNode.insertBefore(js, fjs);
+                                    }
+                                }(document, 'script', 'twitter-wjs');</script>
+
+                        </div>
+                        <div class="fb-like" data-href="<?php the_permalink(); ?>" data-layout="button_count"
+                             data-action="like" data-show-faces="true" data-share="false"></div>
+
+                    <?php endwhile; endif; ?>
 
                     <div class="text-center">
                         <?php global $wp_rewrite;
