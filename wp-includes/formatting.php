@@ -28,7 +28,7 @@
  * @return string The string replaced with html entities
  */
 function wptexturize($text, $reset = false) {
-	global $wp_cockneyreplace, $shortcode_tags;
+	global $wp_cockneyreplace;
 	static $static_characters, $static_replacements, $dynamic_characters, $dynamic_replacements,
 		$default_no_texturize_tags, $default_no_texturize_shortcodes, $run_texturize = true;
 
@@ -205,34 +205,21 @@ function wptexturize($text, $reset = false) {
 
 	// Look for shortcodes and HTML elements.
 
-	$tagnames = array_keys( $shortcode_tags );
-	$tagregexp = join( '|', array_map( 'preg_quote', $tagnames ) );
-	$tagregexp = "(?:$tagregexp)(?![\\w-])"; // Excerpt of get_shortcode_regex().
-
-	$comment_regex =
-		  '!'           // Start of comment, after the <.
-		. '(?:'         // Unroll the loop: Consume everything until --> is found.
-		.     '-(?!->)' // Dash not followed by end of comment.
-		.     '[^\-]*+' // Consume non-dashes.
-		. ')*+'         // Loop possessively.
-		. '-->';        // End of comment.
-
 	$regex =  '/('			// Capture the entire match.
 		.	'<'		// Find start of element.
 		.	'(?(?=!--)'	// Is this a comment?
-		.		$comment_regex	// Find end of comment
+		.		'.+?--\s*>'	// Find end of comment
 		.	'|'
 		.		'[^>]+>'	// Find end of element
 		.	')'
 		. '|'
 		.	'\['		// Find start of shortcode.
-		.	'[\/\[]?'	// Shortcodes may begin with [/ or [[
-		.	$tagregexp	// Only match registered shortcodes, because performance.
+		.	'\[?'		// Shortcodes may begin with [[
 		.	'(?:'
-		.		'[^\[\]<>]+'	// Shortcodes do not contain other shortcodes. Quantifier critical.
+		.		'[^\[\]<>]'	// Shortcodes do not contain other shortcodes.
 		.	'|'
-		.		'<[^\[\]>]*>' 	// HTML elements permitted. Prevents matching ] before >.
-		.	')*+'		// Possessive critical.
+		.		'<[^>]+>' 	// HTML elements permitted. Prevents matching ] before >.
+		.	')++'
 		.	'\]'		// Find end of shortcode.
 		.	'\]?'		// Shortcodes may end with ]]
 		. ')/s';
@@ -254,12 +241,12 @@ function wptexturize($text, $reset = false) {
 
 			continue;
 
-		} elseif ( '[' === $first && 1 === preg_match( '/^\[\/?' . $tagregexp . '(?:[^\[\]<>]+|<[^\[\]>]*>)*+\]$/', $curl ) ) {
+		} elseif ( '[' === $first && 1 === preg_match( '/^\[(?:[^\[\]<>]|<[^>]+>)++\]$/', $curl ) ) {
 			// This is a shortcode delimiter.
 
 			_wptexturize_pushpop_element( $curl, $no_texturize_shortcodes_stack, $no_texturize_shortcodes );
 
-		} elseif ( '[' === $first && 1 === preg_match( '/^\[[\/\[]?' . $tagregexp . '(?:[^\[\]<>]+|<[^\[\]>]*>)*+\]\]?$/', $curl ) ) {
+		} elseif ( '[' === $first && 1 === preg_match( '/^\[\[?(?:[^\[\]<>]|<[^>]+>)++\]\]?$/', $curl ) ) {
 			// This is an escaped shortcode delimiter.
 
 			// Do not texturize.

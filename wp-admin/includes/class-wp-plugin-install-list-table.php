@@ -273,9 +273,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 			return;
 		}
 
-		if ( 'top' ==  $which ) {
-			wp_referer_field();
-		?>
+		if ( 'top' ==  $which ) { ?>
 			<div class="tablenav top">
 				<div class="alignleft actions">
 					<?php

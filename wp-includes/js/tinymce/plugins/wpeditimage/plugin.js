@@ -1,7 +1,6 @@
 /* global tinymce */
 tinymce.PluginManager.add( 'wpeditimage', function( editor ) {
-	var serializer,
-		toolbarActive = false,
+	var toolbarActive = false,
 		editingImage = false;
 
 	function parseShortcode( content ) {
@@ -83,7 +82,7 @@ tinymce.PluginManager.add( 'wpeditimage', function( editor ) {
 				return '';
 			}
 
-			out = b.replace( /\s*<dl ([^>]+)>\s*<dt [^>]+>([\s\S]+?)<\/dt>\s*<dd [^>]+>([\s\S]*?)<\/dd>\s*<\/dl>\s*/gi, function( a, b, c, caption ) {
+			out = b.replace( /<dl ([^>]+)>\s*<dt [^>]+>([\s\S]+?)<\/dt>\s*<dd [^>]+>([\s\S]*?)<\/dd>\s*<\/dl>/gi, function( a, b, c, caption ) {
 				var id, classes, align, width;
 
 				width = c.match( /width="([0-9]*)"/ );
@@ -117,7 +116,7 @@ tinymce.PluginManager.add( 'wpeditimage', function( editor ) {
 				return '[caption id="' + id + '" align="' + align + '" width="' + width + '"' + classes + ']' + c + ' ' + caption + '[/caption]';
 			});
 
-			if ( out.indexOf('[caption') === -1 ) {
+			if ( out.indexOf('[caption') !== 0 ) {
 				// the caption html seems broken, try to find the image that may be wrapped in a link
 				// and may be followed by <p> with the caption text.
 				out = b.replace( /[\s\S]*?((?:<a [^>]+>)?<img [^>]+>(?:<\/a>)?)(<p>[\s\S]*<\/p>)?[\s\S]*/gi, '<p>$1</p>$2' );
@@ -227,19 +226,6 @@ tinymce.PluginManager.add( 'wpeditimage', function( editor ) {
 		return node && !! ( node.textContent || node.innerText );
 	}
 
-	// Verify HTML in captions
-	function verifyHTML( caption ) {
-		if ( ! caption || ( caption.indexOf( '<' ) === -1 && caption.indexOf( '>' ) === -1 ) ) {
-			return caption;
-		}
-
-		if ( ! serializer ) {
-			serializer = new tinymce.html.Serializer( {}, editor.schema );
-		}
-
-		return serializer.serialize( editor.parser.parse( caption, { forced_root_block: false } ) );
-	}
-
 	function updateImage( imageNode, imageData ) {
 		var classes, className, node, html, parent, wrap, linkNode,
 			captionNode, dd, dl, id, attrs, linkAttrs, width, height, align,
@@ -317,7 +303,6 @@ tinymce.PluginManager.add( 'wpeditimage', function( editor ) {
 		}
 
 		if ( imageData.caption ) {
-			imageData.caption = verifyHTML( imageData.caption );
 
 			id = imageData.attachment_id ? 'attachment_' + imageData.attachment_id : null;
 			align = 'align' + ( imageData.align || 'none' );
@@ -660,7 +645,6 @@ tinymce.PluginManager.add( 'wpeditimage', function( editor ) {
 
 				// Convert remaining line breaks to <br>
 				caption = caption.replace( /(<br[^>]*>)\s*\n\s*/g, '$1' ).replace( /\s*\n\s*/g, '<br />' );
-				caption = verifyHTML( caption );
 			}
 
 			if ( ! imgNode ) {
